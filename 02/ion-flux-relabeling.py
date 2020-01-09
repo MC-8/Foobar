@@ -142,5 +142,5 @@ if __name__=="__main__":
     t2_sol = [21,15,29]
     t1_res = solution(3, [7, 3, 5, 1])
     t2_res = solution(5, [19, 14, 28])
-    print 'Test 1 passed' if (t1_sol==t1_res) else 'Test 1 failed. Expected: {}, actual {}'.format(t1_sol, t1_res)
-    print 'Test 2 passed' if (t2_sol==t2_res) else 'Test 2 failed. Expected: {}, actual {}'.format(t2_sol, t2_res)
+    print( 'Test 1 passed' if (t1_sol==t1_res) else 'Test 1 failed. Expected: {}, actual {}'.format(t1_sol, t1_res))
+    print( 'Test 2 passed' if (t2_sol==t2_res) else 'Test 2 failed. Expected: {}, actual {}'.format(t2_sol, t2_res))
