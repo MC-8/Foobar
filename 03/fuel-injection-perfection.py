@@ -57,25 +57,14 @@ from collections import defaultdict, deque, namedtuple
 def process_fuel(fuel, step_n, HM):
 
     # Optimization: kill branches early if I've already been here, and no improvement was found
-    #if fuel in HM and step_n >= HM[fuel]:
-        #return float('inf')
-    if fuel not in HM:
-        HM[fuel] = min(step_n, HM.get(fuel,float('inf')))
-
-    if fuel==1: 
-        solution = step_n
-    elif fuel % 2 == 1:
-        solution = min(process_fuel(fuel+1, step_n+1, HM), process_fuel(fuel-1, step_n+1, HM))
-    elif fuel % 2 == 0:
-        solution = process_fuel(fuel//2, step_n+1, HM)
-    else:
-        raise RuntimeError("Unexpected behaviour in process_fuel")
-    return solution
-
-def process_fuel_DFS(fuel, step_n, HM, Q):
-    # Optimization: kill branches early if I've already been here, and no improvement was found
     if fuel in HM and step_n >= HM[fuel]:
         return float('inf')
+
+    if fuel not in HM:
+        HM[fuel] = min(step_n, HM.get(fuel,float('inf')))
+    
+    if fuel in HM and step_n < HM[fuel]:
+        HM[fuel] = step_n
 
     if fuel==1: 
         solution = step_n
@@ -88,13 +77,9 @@ def process_fuel_DFS(fuel, step_n, HM, Q):
     return solution
 
 def solution(n):
-    # The general case we have the 3 options, we could explore a tree with "what if" I did that (+1/-1 //2) and assuming that +1+1 and -1-1 does not improve the result (should be able to prove it).
-    
-    # If number is odd, branch +1 and -1, repeat, add depth
-    # If number is even, divide by 2, repeat, add depth.
-    # Recursive solution should do it
-    # To reduce branches and speedup solution, could keep a dict/hashtable of number/steps so far, and discard branch if we are not improving
     HM = {}
+    
+    # DFS solution begin
     Q = deque()
     state = namedtuple('state','n depth')
     Q.append(state(int(n), 0))
@@ -102,24 +87,25 @@ def solution(n):
     counter = 0
     while Q:
         s = Q.pop()
-        counter+=1
-        # print(s.n)
-        if counter%10000==0:
-            lq = len(Q)
-            print("{}".format(lq))
 
+        # Kill branch early if there is no improvement
         if s.n in HM and s.depth >= HM[s.n]:
             continue
         
+        # First time seen this number, update hash table
         if s.n not in HM:
             HM[s.n] = s.depth
 
+        # We found a better number of steps to reach this number
+        if s.n in HM and s.depth < HM[s.n]:
+            HM[s.n] = s.depth
+        
+        # 0 Edge case
         if s.n==0:
             continue
         
         if s.n==1:
             candidate_depth = min(candidate_depth, s.depth)
-            #print("{}".format(candidate_depth))
 
         elif s.n % 2 == 1: # Odd
             Q.append(state(s.n-1, s.depth+1))
@@ -129,12 +115,13 @@ def solution(n):
             Q.append(state(s.n//2, s.depth+1))
     
     return candidate_depth
-    #
-    # return process_fuel(int(n), 0, HM)
+    # DFS solution end
 
-print(solution('3000000000000000000000000'))
-# print(solution('4'))
-# print(solution('17'))
+    return process_fuel(int(n), 0, HM) # Recursive solution
+
+print(solution('4'))
+print(solution('17'))
+print(solution('300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000'))
 
 
 
