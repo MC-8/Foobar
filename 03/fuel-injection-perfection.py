@@ -114,14 +114,8 @@ def answer_random_dude(n):
     if n & 1 == 0:
       n >>= 1
     else:
-      # Use bit manipulation to create as many 0 from LSB as possible
-        if (n == 3 or n % 4 == 1):
-            n = n - 1
-        else:
-            n = n + 1
-
-      #n = (n - 1) if (n == 3 or n % 4 == 1) else (n + 1)
-
+        # Use bit manipulation to create as many 0 from LSB as possible
+        n = (n - 1) if (n == 3 or n % 4 == 1) else (n + 1)
     steps += 1
   return steps
 
