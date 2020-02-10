@@ -76,6 +76,55 @@ def process_fuel(fuel, step_n, HM):
         raise RuntimeError("Unexpected behaviour in process_fuel")
     return solution
 
+
+def go_down(n):
+
+    i1, i2 = 1, 0
+    while i1<n:
+        i2 = i1
+        i1 *= 2
+    return i1-n+1 >= n-i2
+
+    if n%2==0:
+        n = n//2
+
+def iteration_mike(n):
+
+    if n%2==0:
+        return n//2
+    if go_down(n):
+        return n-1
+    else:
+        return n+1
+
+def solution_mike(n):
+    i = 0
+    n = int(n)
+    while n>1:
+        n = iteration_mike(n)
+        i+=1
+    return i
+
+def answer_random_dude(n):
+  n = int(n)
+  steps = 0
+  
+  while n > 1:
+    # if n is even, divide by 2 using bit manipulation
+    if n & 1 == 0:
+      n >>= 1
+    else:
+      # Use bit manipulation to create as many 0 from LSB as possible
+        if (n == 3 or n % 4 == 1):
+            n = n - 1
+        else:
+            n = n + 1
+
+      #n = (n - 1) if (n == 3 or n % 4 == 1) else (n + 1)
+
+    steps += 1
+  return steps
+
 def solution(n):
     HM = {}
     
@@ -122,6 +171,14 @@ def solution(n):
 print(solution('4'))
 print(solution('17'))
 print(solution('300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000'))
+
+print(solution_mike('4'))
+print(solution_mike('17'))
+print(solution_mike('300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000'))
+
+#for i in range(1,100):
+i = 300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000300000000000000000000000000000
+print("{}: {} - {} - {}".format(i, solution(str(i)), solution_mike(str(i)), answer_random_dude(str(i))))
 
 
 
